@@ -10,29 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then(res => res.json())
   }
 
+  const calculateRealValue = (total, sample) => {
+    const [ totalNum, sampleNum ] = ([total, sample]).map(it => Number(it.replace(/[$,]/g, '')))
+    return Number(totalNum - sampleNum).toLocaleString('en-US', {
+      'style': 'currency', 'currency': 'USD'
+    })
+  }
+
   fetchJson({'route': 'populatedata'}).then((data) => {
-    const brandListContainer = document.getElementById('brand-list')
+    const salesOrders = {}
+    for(salesOrder of data.salesOrderNumbers) {
+      salesOrders[salesOrder.sales_order] = salesOrder.customer
+    }
     console.log(data)
+
+    const brandListContainer = document.getElementById('brand-list')
+    const paxPodsContainer = document.getElementById('pax-pods')
     for(brand of data.brands) {
-      const brandDiv = document.createElement('div')
-      brandDiv.classList.add('brand-list-item')
-      brandDiv.id = brand.brand_name.replace(/[,.'"\s_]/g, '-')
-      brandListContainer.appendChild(brandDiv)
+      brand.brandRealValue = calculateRealValue(brand.brand_total_value, brand.sample_value)
 
-      const categoriesContainer = document.createElement('div')
-      categoriesContainer.classList.add('categories-container', 'flex-container', 'vertical')
-
-      brandDiv.innerHTML = `
-      <div class="brand-header flex-container header">
-        <span class="brand-title">${brand.brand_name}</span>
-        <span class="brand-value">${brand.brand_total_value}</span>
-      </div>
-      `
-
-      brandDiv.appendChild(categoriesContainer)
+      const categoriesContainer = generateBrand(brand, brandListContainer)
 
       for(category of data.categories) {
         if(category.belongs_to_brand === brand.brand_name) {
+          const categoryRealValue = calculateRealValue(category.category_total_value, category.sample_value)
+          const categoryDisplayTitle = category.category_name.split('**')[1]
+
           const categoryDiv = document.createElement('div')
           categoryDiv.classList.add('category-list-item')
           categoriesContainer.appendChild(categoryDiv)
@@ -45,8 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
           categoryDiv.innerHTML = `
           <div class="category-header flex-container header">
-            <span class="category-title">${category.category_name.split('**')[1]}</span>
-            <span class="category-value">${category.category_total_value}</span>
+            <span class="category-title">${categoryDisplayTitle}</span>
+            <div class="values-list vertical flex-container">
+              <div class="flex-container">
+                <label>Total: </label>
+                <span class="category-value">${category.category_total_value}</span>
+              </div>
+              <div class="flex-container">
+                <label>Samples: </label>
+                <span class="category-value-sample">${category.sample_value}</span>
+              </div>
+              <div class="flex-container">
+                <label>Sales: </label>
+                <span class="category-value-real">${categoryRealValue}</span>
+              </div>
+            </div>
           </div>
           <div class="item-container hidden flex-container vertical"></div>
           `
@@ -55,20 +71,36 @@ document.addEventListener('DOMContentLoaded', () => {
           cateroyItemContainer.appendChild(itemSampleContainer)
           cateroyItemContainer.appendChild(itemContainer)
 
+          const isPaxPod = categoryDisplayTitle.toLowerCase().includes('pax pod')
+          let paxpodCat
+          if(isPaxPod) {
+            const categoriesPaxContainer = generateBrand(brand, paxPodsContainer)
+            paxpodCat = categoryDiv.cloneNode(true)
+            categoriesPaxContainer.appendChild(paxpodCat)
+          }
+
           for(item of data.items) {
             if(item.belongs_to_category === category.category_name) {
               const itemDiv = document.createElement('div')
-              itemDiv.classList.add('item-list-item', 'flex-container')
-              if(Number(item.item_value.replace(/[,$]/g, '')) < 1) {
-                itemContainer.appendChild(itemDiv)
-              } else {
+              let isSample = Number(item.item_value.replace(/[,$]/g, '')) < 1
+              if(isSample) {
                 itemSampleContainer.appendChild(itemDiv)
+              } else {
+                itemContainer.appendChild(itemDiv)
               }
 
               itemDiv.innerHTML = `
+              <div class="flex-container">
                 <span class="item-sales-order">${item.belongs_to_salesorder}</span>
                 <span class="item-value">${item.item_value}</span>
+              </div>
+              <span class="item-customer">${salesOrders[item.belongs_to_salesorder]}</span>
               `
+
+              if(isPaxPod) {
+                const clonedItem = itemDiv.cloneNode(true)
+                paxpodCat.querySelector(`.item-container-${isSample ? 'sample' : 'normal'}`).appendChild(clonedItem)
+              }
             }
           }
         }
@@ -86,3 +118,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
+
+function generateBrand(data, parent) {
+  const brandDiv = document.createElement('div')
+  brandDiv.classList.add('brand-list-item')
+  brandDiv.id = data.brand_name.replace(/[,.'"\s_]/g, '-')
+  parent.appendChild(brandDiv)
+
+  const categoriesContainer = document.createElement('div')
+  categoriesContainer.classList.add('categories-container', 'flex-container', 'vertical')
+
+  brandDiv.innerHTML = `
+  <div class="brand-header flex-container header">
+    <span class="brand-title">${data.brand_name}</span>
+    <div class="values-list vertical flex-container">
+      <div class="flex-container">
+        <label>Total: </label>
+        <span class="brand-value">${data.brand_total_value}</span>
+      </div>
+      <div class="flex-container">
+        <label>Samples: </label>
+        <span class="brand-value-sample">${data.sample_value}</span>
+      </div>
+      <div class="flex-container">
+        <label>Sales: </label>
+        <span class="brand-value-real">${data.brandRealValue}</span>
+      </div>
+    </div>
+  </div>
+  `
+
+  brandDiv.appendChild(categoriesContainer)
+  return categoriesContainer
+}

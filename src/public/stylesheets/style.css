@@ -17,10 +17,11 @@
   border-radius: 5px;
 }
 
-#brand-list {
+#brand-list, #pax-pods {
   margin: 5vh 50px 0 50px;
   width: 1800px;
   overflow-x: scroll;
+  justify-content: space-around;
 }
 
 .category-list-item {
@@ -30,9 +31,17 @@
 }
 
 .category-list-item:hover {
-  background-color: #CCC;
+  background-color: #EEC;
   transition-property: background-color;
-  transition-duration: 250ms;
+  transition-duration: 400ms;
+}
+
+.values-list {
+  font-size: 0.8em;
+}
+
+.values-list .flex-container {
+  width: 200px;
 }
 
 .item-container-sample {
@@ -45,14 +54,14 @@
 }
 
 .category-list-item:active {
-  background-color: #AAA;
+  background-color: #CCF;
 }
 
 .brand-list-item {
   width: 365px;
   margin: 5px;
   padding: 5px;
-  box-shadow: 1px 1px 2px gray;
+  box-shadow: 1px 1px 6px 1px grey;
   border-radius: 5px;
 }
 
