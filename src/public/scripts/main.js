@@ -38,26 +38,38 @@ document.addEventListener('DOMContentLoaded', () => {
           categoriesContainer.appendChild(categoryDiv)
 
           const itemContainer = document.createElement('div')
-          itemContainer.classList.add('item-container', 'flex-container', 'vertical', 'hidden')
+          itemContainer.classList.add('item-container-normal', 'flex-container', 'vertical')
+
+          const itemSampleContainer = document.createElement('div')
+          itemSampleContainer.classList.add('item-container-sample', 'flex-container', 'vertical')
 
           categoryDiv.innerHTML = `
           <div class="category-header flex-container header">
             <span class="category-title">${category.category_name.split('**')[1]}</span>
             <span class="category-value">${category.category_total_value}</span>
           </div>
+          <div class="item-container hidden flex-container vertical"></div>
           `
 
-          categoryDiv.appendChild(itemContainer)
+          const cateroyItemContainer = categoryDiv.querySelector('.item-container')
+          cateroyItemContainer.appendChild(itemSampleContainer)
+          cateroyItemContainer.appendChild(itemContainer)
 
           for(item of data.items) {
-            const itemDiv = document.createElement('div')
-            itemDiv.classList.add('item-list-item', 'flex-container')
-            itemContainer.appendChild(itemDiv)
+            if(item.belongs_to_category === category.category_name) {
+              const itemDiv = document.createElement('div')
+              itemDiv.classList.add('item-list-item', 'flex-container')
+              if(Number(item.item_value.replace(/[,$]/g, '')) < 1) {
+                itemContainer.appendChild(itemDiv)
+              } else {
+                itemSampleContainer.appendChild(itemDiv)
+              }
 
-            itemDiv.innerHTML = `
-              <span class="item-sales-order">${item.belongs_to_salesorder}</span>
-              <span class="item-value">${item.item_value}</span>
-            `
+              itemDiv.innerHTML = `
+                <span class="item-sales-order">${item.belongs_to_salesorder}</span>
+                <span class="item-value">${item.item_value}</span>
+              `
+            }
           }
         }
       }
@@ -68,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentListItem = categoryListItem
       categoryListItem.addEventListener('click', (e) => {
         const clickedItem = currentListItem.querySelector('.item-container')
-        console.log(clickedItem)
         const isHidden = Array.from(clickedItem.classList).includes('hidden')
         clickedItem.classList[isHidden ? 'remove' : 'add']('hidden')
       })

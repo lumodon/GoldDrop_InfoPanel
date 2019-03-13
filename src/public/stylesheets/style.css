@@ -35,6 +35,10 @@
   transition-duration: 250ms;
 }
 
+.item-container-sample {
+  border-bottom: 1px solid black;
+}
+
 .item-list-item {
   margin: 2px;
   padding: 5px;
