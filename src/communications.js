@@ -9,7 +9,7 @@ function sendEmail(data) {
     'from': process.env.EMAIL_FROM,
     'subject': 'Distru Monthly Report for ' + new Date().toString().split(' ').slice(0,4).join(' '),
     'text': 'Sending test',
-    'html': JSON.stringify(data, null, 2),
+    'html': data,
   }
 
   return sgMail.send(msg)
