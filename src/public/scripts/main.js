@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
           for(item of data.items) {
             if(item.belongs_to_category === category.category_name) {
               const itemDiv = document.createElement('div')
+              itemDiv.classList.add('flex-container', 'vertical')
               let isSample = Number(item.total_value.replace(/[,$]/g, '')) < 1
               if(isSample) {
                 itemSampleContainer.appendChild(itemDiv)
@@ -90,15 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
               }
 
               itemDiv.innerHTML = `
-              <h5>${item.unit_name}</h5>
+              <h4>${item.unit_name}</h4>
+              <h5 class="item-customer">${salesOrders[item.belongs_to_salesorder]}</h5>
               <div class="flex-container">
-                <span class="item-sales-order">${item.belongs_to_salesorder}</span>
-                <span class="item-value">${item.total_value}</span>
-                <span class="">Per Unit: ${item.cost_per_unit}</span>
-                <span class="">Qty: ${item.quantity}</span>
-                <span class="">Unit Category: ${item.unit_category}</span>
+                <div class="flex-container vertical left">
+                  <span>Sales Order:</span>
+                  <span>Total Value:</span>
+                  <span>Per Unit Value:</span>
+                  <span>Quantity:</span>
+                  <span>Category:</span>
+                </div>
+                <div class="flex-container vertical right">
+                  <span class="item-sales-order">${item.belongs_to_salesorder}</span>
+                  <span class="item-value">${item.total_value}</span>
+                  <span class="">${item.cost_per_unit}</span>
+                  <span class="">${item.quantity}</span>
+                  <span class="">${item.unit_category}</span>
+                </div>
               </div>
-              <span class="item-customer">${salesOrders[item.belongs_to_salesorder]}</span>
               `
 
               if(isPaxPod) {
