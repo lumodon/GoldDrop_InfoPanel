@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
           for(item of data.items) {
             if(item.belongs_to_category === category.category_name) {
               const itemDiv = document.createElement('div')
-              let isSample = Number(item.item_value.replace(/[,$]/g, '')) < 1
+              let isSample = Number(item.total_value.replace(/[,$]/g, '')) < 1
               if(isSample) {
                 itemSampleContainer.appendChild(itemDiv)
               } else {
@@ -90,9 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
               }
 
               itemDiv.innerHTML = `
+              <h5>${item.unit_name}</h5>
               <div class="flex-container">
                 <span class="item-sales-order">${item.belongs_to_salesorder}</span>
-                <span class="item-value">${item.item_value}</span>
+                <span class="item-value">${item.total_value}</span>
+                <span class="">Per Unit: ${item.cost_per_unit}</span>
+                <span class="">Qty: ${item.quantity}</span>
+                <span class="">Unit Category: ${item.unit_category}</span>
               </div>
               <span class="item-customer">${salesOrders[item.belongs_to_salesorder]}</span>
               `
