@@ -15,8 +15,9 @@ app.set('views', path.join(__dirname, 'views/pages'))
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'public/stylesheets')))
-app.use(express.static(path.join(__dirname, 'public/scripts')))
+// app.use(express.static(path.join(__dirname, 'public/scripts')))
 app.use(express.static(path.join(__dirname, 'public/images')))
+app.use(express.static(path.join(__dirname, '../dist/')))
 
 app.use('/', require('./routes'))
 app.use((req, res) => {

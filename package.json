@@ -1,6 +1,6 @@
 {
   "name": "informationpanel",
-  "version": "0.1.0-alpha.1",
+  "version": "0.2.1-alpha.4",
   "description": "",
   "main": "src/index.js",
   "dependencies": {
@@ -19,6 +19,6 @@
     "start": "sudo node src/index.js",
     "build": "webpack --mode development"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Lumodon",
+  "license": "NO LICENSE"
 }

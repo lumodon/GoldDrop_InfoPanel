@@ -24,9 +24,19 @@ function getItems() {
   `)
 }
 
+function getPods() {
+  return db.any(`
+    SELECT * FROM items
+    JOIN sales
+    ON sales_order = belongs_to_salesorder
+    WHERE unit_category = 'Pods';
+  `)
+}
+
 module.exports = {
   getBrands,
   getCategories,
   getSalesOrderNumbers,
   getItems,
+  getPods,
 }

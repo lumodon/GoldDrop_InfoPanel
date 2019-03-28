@@ -4,6 +4,7 @@ const {
   getCategories,
   getSalesOrderNumbers,
   getItems,
+  getPods,
 } = require('../db/getters')
 
 router.post('/', (req, res) => {
@@ -22,8 +23,9 @@ router.post('/populatedata', (req, res) => {
     getCategories(),
     getSalesOrderNumbers(),
     getItems(),
-  ]).then(([ brands, categories, salesOrderNumbers, items ]) => {
-    res.send(JSON.stringify({ brands, categories, salesOrderNumbers, items }))
+    getPods(),
+  ]).then(([ brands, categories, salesOrderNumbers, items, podData ]) => {
+    res.send(JSON.stringify({ brands, categories, salesOrderNumbers, items, podData }))
   })
 })
 
