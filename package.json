@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "dependencies": {
+    "@material/select": "^1.1.0",
     "@sendgrid/mail": "^6.3.1",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
@@ -12,6 +13,7 @@
     "pg-promise": "^8.6.3"
   },
   "devDependencies": {
+    "css-loader": "^2.1.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },

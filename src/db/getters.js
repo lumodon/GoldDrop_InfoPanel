@@ -26,7 +26,19 @@ function getItems() {
 
 function getPods() {
   return db.any(`
-    SELECT * FROM items
+    SELECT items.total_value as items_total_value,
+    sales.total_value as sales_total_value,
+    sales_order,
+    id,
+    belongs_to_brand,
+    href,
+    url_u,
+    cost_per_unit,
+    quantity,
+    unit_name,
+    customer,
+    sample_value
+    FROM items
     JOIN sales
     ON sales_order = belongs_to_salesorder
     WHERE unit_category = 'Pods';

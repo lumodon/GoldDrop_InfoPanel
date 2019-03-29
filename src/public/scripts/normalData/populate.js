@@ -1,18 +1,12 @@
-const calculateRealValue = (total, sample) => {
-  const [ totalNum, sampleNum ] = ([total, sample]).map(it => Number(it.replace(/[$,]/g, '')))
-  return Number(totalNum - sampleNum).toLocaleString('en-US', {
-    'style': 'currency', 'currency': 'USD'
-  })
-}
+import { calculateRealValue } from '../utils'
 
-function populateNormalData(data) {
+function populate(data) {
   const salesOrders = {}
   for(const salesOrder of data.salesOrderNumbers) {
     salesOrders[salesOrder.sales_order] = salesOrder.customer
   }
 
   const brandListContainer = document.getElementById('brand-list')
-  const paxPodsContainer = document.getElementById('pax-pods')
   for(const brand of data.brands) {
     brand.brandRealValue = calculateRealValue(brand.brand_total_value, brand.sample_value)
 
@@ -24,7 +18,7 @@ function populateNormalData(data) {
         const categoryDisplayTitle = category.category_name.split('**')[1]
 
         const categoryDiv = document.createElement('div')
-        categoryDiv.classList.add('category-list-item')
+        categoryDiv.classList.add('list-item')
         categoriesContainer.appendChild(categoryDiv)
 
         const itemContainer = document.createElement('div')
@@ -58,18 +52,10 @@ function populateNormalData(data) {
         cateroyItemContainer.appendChild(itemSampleContainer)
         cateroyItemContainer.appendChild(itemContainer)
 
-        const isPaxPod = categoryDisplayTitle.toLowerCase().includes('pax pod')
-        let paxpodCat
-        if(isPaxPod) {
-          const categoriesPaxContainer = generateBrand(brand, paxPodsContainer)
-          paxpodCat = categoryDiv.cloneNode(true)
-          categoriesPaxContainer.appendChild(paxpodCat)
-        }
-
         for(const item of data.items) {
           if(item.belongs_to_category === category.category_name) {
             const itemDiv = document.createElement('div')
-            itemDiv.classList.add('flex-container', 'vertical')
+            itemDiv.classList.add('flex-container', 'vertical', 'bordered')
             let isSample = Number(item.total_value.replace(/[,$]/g, '')) < 1
             if(isSample) {
               itemSampleContainer.appendChild(itemDiv)
@@ -97,11 +83,6 @@ function populateNormalData(data) {
               </div>
             </div>
             `
-
-            if(isPaxPod) {
-              const clonedItem = itemDiv.cloneNode(true)
-              paxpodCat.querySelector(`.item-container-${isSample ? 'sample' : 'normal'}`).appendChild(clonedItem)
-            }
           }
         }
       }
@@ -119,7 +100,7 @@ function generateBrand(data, parent) {
   categoriesContainer.classList.add('categories-container', 'flex-container', 'vertical')
 
   brandDiv.innerHTML = `
-  <div class="brand-header flex-container header">
+  <div class="flex-container header">
     <span class="brand-title">${data.brand_name}</span>
     <div class="values-list vertical flex-container">
       <div class="flex-container">
@@ -142,4 +123,4 @@ function generateBrand(data, parent) {
   return categoriesContainer
 }
 
-export default populateNormalData
+export default populate

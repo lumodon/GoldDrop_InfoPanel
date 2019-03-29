@@ -1,8 +1,27 @@
 <% include ../partials/header.ejs %>
 
-<div class="table">
-  <div id="pax-pods" class="flex-container"></div>
-  <div id="brand-list" class="flex-container"></div>
+<div class="flex-container super-container">
+  <div class="menu flex-container vertical">
+    <div class="menu-option" data-menu="pax">Pax Pods</div>
+    <div class="menu-option" data-menu="normal">All Items</div>
+    <div class="pax page">
+      <div class="change-view-type">
+        <div class="view-type-option selected" data-option="customer">By Customer</div>
+        <div class="view-type-option" data-option="product">By Product</div>
+      </div>
+    </div>
+  </div>
+  <div class="main-body flex-container">
+    <div class="table pax page">
+      <div id="pax-pods" class="flex-container">
+        <div id="by-customer" class="flex-container vertical"></div>
+        <div id="by-product" class="flex-container vertical hidden"></div>
+      </div>
+    </div>
+    <div class="hidden table normal page">
+      <div id="brand-list" class="flex-container"></div>
+    </div>
+  </div>
 </div>
 
 <% include ../partials/footer.ejs %>
