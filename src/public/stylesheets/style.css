@@ -190,9 +190,12 @@ html, body, .super-container {
 
 .grid {
   display: grid;
-  grid-template-columns: 80px 110px;
+  /* grid-auto-columns: 110px; */
+  /* grid-template-columns: 80px 110px; */
   grid-gap: 5px;
-  grid-auto-rows: minmax(0px, auto);
+  /* grid-auto-rows: minmax(0px, auto); */
+  grid-template-columns: repeat(2, 10vw);
+  grid-template-rows: repeat(5, 10vh);
   margin-right: 10px;
   box-shadow:
     0px -2px 1px rgba(0, 0, 0, 0.2),

@@ -15,10 +15,13 @@ function generateProductByCustomerDetails(type, productData, total) {
   `
 
   const detailsContainer = productDetails.querySelector('.values-list')
+  const detailsElement = document.createElement('div')
+  detailsElement.classList.add('grid')
+  detailsContainer.appendChild(detailsElement)
+
+  let newItems = ``
   for(const item of productData) {
-    const detailsElement = document.createElement('div')
-    detailsElement.innerHTML = `
-    <div class="grid">
+    newItems += `
         <span class="label-item">Item:</span>
         <span class="value-item">${item.unit_name}</span>
         <span class="label-item extra-info">Sales Order:</span>
@@ -29,11 +32,9 @@ function generateProductByCustomerDetails(type, productData, total) {
         <span class="value-item">${item.cost_per_unit}</span>
         <span class="label-item">Quantity:</span>
         <span class="value-item">${item.quantity}</span>
-    </div>
     `
-    detailsContainer.appendChild(detailsElement)
   }
-
+  detailsElement.innerHTML = newItems
   return productDetails
 }
 
