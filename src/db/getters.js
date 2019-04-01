@@ -37,7 +37,10 @@ function getPods() {
     quantity,
     unit_name,
     customer,
-    sample_value
+    sample_value,
+    due_date_epoch,
+    order_date_epoch,
+    current_status
     FROM items
     JOIN sales
     ON sales_order = belongs_to_salesorder

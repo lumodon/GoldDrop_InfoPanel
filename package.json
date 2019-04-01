@@ -10,6 +10,7 @@
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "moment": "^2.24.0",
     "pg-promise": "^8.6.3"
   },
   "devDependencies": {
@@ -19,7 +20,10 @@
   },
   "scripts": {
     "start": "sudo node src/index.js",
-    "build": "webpack --mode development"
+    "start:dev": "npm run build:dev && tmux new-session -d -s information-panel-nodemon 'sudo nodemon'",
+    "build": "webpack --mode production",
+    "build:dev": "tmux new-session -d -s webpack-watcher 'webpack --mode development --env dev'",
+    "kill": "tmux kill-session -t webpack-watcher && tmux kill-session -t information-panel-nodemon"
   },
   "author": "Lumodon",
   "license": "NO LICENSE"

@@ -1,5 +1,14 @@
 import { createElement, convertToCurrency } from '../../utils'
 import { MINIMUM_VALUE_FOR_SAMPLE } from '../constants'
+import * as moment from 'moment'
+
+// console.log(moment().startOf('month').subtract(1, 'month').calendar())
+// console.log(moment())
+window['moment'] = moment
+
+function dateIsLastMonth(dateAsEpoch) {
+  return moment().startOf('month').subtract(1, 'month').month() === moment(dateAsEpoch).subtract(1, 'month').month()
+}
 
 function getNumFromString(val) {
   return Number(val.replace(/[$,]/g, ''))
@@ -9,6 +18,8 @@ function reorganizeData(inputData) {
   const outputData = {}
 
   for(const item of inputData) {
+    console.log(dateIsLastMonth(item.order_date_epoch))
+    if(!(item.current_status === 'DELIVERED' || item.current_status === 'DELIVERING') || !dateIsLastMonth(item.order_date_epoch)) continue
     const values = {
       'total': getNumFromString(item.items_total_value),
       'quantity': Number(item.quantity),
@@ -61,6 +72,10 @@ function generateProductByPriceDetails(type, productDataCustomers) {
       <span ${styleItem}2;" class="value-item">${convertToCurrency(item.total)}</span>
       <span ${styleLabel}3;" class="label-item">Quantity:</span>
       <span ${styleItem}3;" class="value-item">${item.quantity}</span>
+      <span ${styleLabel}4;" class="label-item">Date Delivered:</span>
+      <span ${styleItem}4;" class="value-item">${new Date(item.due_date_epoch).toString()}</span>
+      <span ${styleLabel}5;" class="label-item">Date Ordered:</span>
+      <span ${styleItem}5;" class="value-item">${new Date(item.order_date_epoch).toString()}</span>
     `
     productIndex++
   }
