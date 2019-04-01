@@ -29,6 +29,11 @@ html, body, .super-container {
   font-size: 1.2em;
 }
 
+.price-total {
+  margin-left: 50px;
+  margin-top: 10px;
+}
+
 .super-container {
   min-height: 100vh;
   width: 100%;
@@ -196,12 +201,10 @@ html, body, .super-container {
   grid-auto-columns: 160px;
 }
 
-.label-item {
-  grid-column: 1 / -1;
-}
-
 .value-item {
-  grid-column: 2 / -1;
+  margin-right: 10px;
+  border-right: solid black 3px;
+  padding-right: 5px;
 }
 
 /* .subgrid {

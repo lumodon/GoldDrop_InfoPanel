@@ -1,0 +1,5 @@
+const MINIMUM_VALUE_FOR_SAMPLE = 3
+
+export {
+  MINIMUM_VALUE_FOR_SAMPLE,
+}
