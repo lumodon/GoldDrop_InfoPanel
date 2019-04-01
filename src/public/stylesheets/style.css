@@ -110,7 +110,15 @@ html, body, .super-container {
   text-align: center;
 }
 
-.view-type-option.selected {
+.menu-hover:hover:not(.selected) {
+  background-color: #ffc;
+}
+
+.menu-hover.selected:hover {
+  background-color: #aca;
+}
+
+.selected {
   background-color: #cec;
 }
 

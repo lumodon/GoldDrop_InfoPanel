@@ -2,6 +2,11 @@ export default () => {
   const menuButtons = document.querySelectorAll('.menu-option')
   for(const menuButton of menuButtons) {
     menuButton.addEventListener('click', () => {
+      for(const otherMenuButton of menuButtons) {
+        otherMenuButton.classList.remove('selected')
+      }
+      menuButton.classList.add('selected')
+
       const targetBodies = document.querySelectorAll('.' + menuButton.dataset.menu)
       for(const bodyItem of document.querySelectorAll('.page')) {
         if(!bodyItem.classList.contains('hidden')) bodyItem.classList.add('hidden')
