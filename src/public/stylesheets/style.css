@@ -190,10 +190,23 @@ html, body, .super-container {
 
 .grid {
   display: grid;
-  /* grid-auto-columns: 110px; */
-  /* grid-template-columns: 80px 110px; */
   grid-gap: 5px;
-  /* grid-auto-rows: minmax(0px, auto); */
+  grid-template-rows: repeat(5, 40px);
+  height: 300px;
+  grid-auto-columns: 160px;
+}
+
+.label-item {
+  grid-column: 1 / -1;
+}
+
+.value-item {
+  grid-column: 2 / -1;
+}
+
+/* .subgrid {
+  display: grid;
+  grid-gap: 5px;
   grid-template-columns: repeat(2, 10vw);
   grid-template-rows: repeat(5, 10vh);
   margin-right: 10px;
@@ -201,7 +214,7 @@ html, body, .super-container {
     0px -2px 1px rgba(0, 0, 0, 0.2),
     0px -2px 1px rgba(0, 0, 0, 0.45);
   height: 160px;
-}
+} */
 
 .grid .value-item, .grid .label-item {
   border-bottom: solid 1px black;

@@ -20,19 +20,27 @@ function generateProductByCustomerDetails(type, productData, total) {
   detailsContainer.appendChild(detailsElement)
 
   let newItems = ``
-  for(const item of productData) {
+  let productIndex = 0
+  while(productIndex < productData.length) {
+    const item = productData[productIndex]
+
+    const styleLabel = `style="grid-column: ${String(2*productIndex + 1)}; grid-row: `
+    const styleItem = `style="grid-column: ${String(2*productIndex + 2)}; grid-row: `
+
+  // for(const item of productData) {
     newItems += `
-        <span class="label-item">Item:</span>
-        <span class="value-item">${item.unit_name}</span>
-        <span class="label-item extra-info">Sales Order:</span>
-        <span class="value-item extra-info item-sales-order">${item.sales_order}</span>
-        <span class="label-item">Total Value:</span>
-        <span class="value-item item-value">${item.items_total_value}</span>
-        <span class="label-item">$ Per Unit:</span>
-        <span class="value-item">${item.cost_per_unit}</span>
-        <span class="label-item">Quantity:</span>
-        <span class="value-item">${item.quantity}</span>
+      <span ${styleLabel}1;" class="label-item">Item:</span>
+      <span ${styleItem}1;" class="value-item">${item.unit_name}</span>
+      <span ${styleLabel}2;" class="label-item extra-info">Sales Order:</span>
+      <span ${styleItem}2;" class="value-item extra-info item-sales-order">${item.sales_order}</span>
+      <span ${styleLabel}3;" class="label-item">Total Value:</span>
+      <span ${styleItem}3;" class="value-item item-value">${item.items_total_value}</span>
+      <span ${styleLabel}4;" class="label-item">$ Per Unit:</span>
+      <span ${styleItem}4;" class="value-item">${item.cost_per_unit}</span>
+      <span ${styleLabel}5;" class="label-item">Quantity:</span>
+      <span ${styleItem}5;" class="value-item">${item.quantity}</span>
     `
+    productIndex++
   }
   detailsElement.innerHTML = newItems
   return productDetails
