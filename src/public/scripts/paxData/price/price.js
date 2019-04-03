@@ -2,27 +2,38 @@ import { createElement, convertToCurrency } from '../../utils'
 import { MINIMUM_VALUE_FOR_SAMPLE } from '../constants'
 import * as moment from 'moment'
 
-// console.log(moment().startOf('month').subtract(1, 'month').calendar())
-// console.log(moment())
 window['moment'] = moment
 
 function dateIsLastMonth(dateAsEpoch) {
-  return moment().startOf('month').subtract(1, 'month').month() === moment(dateAsEpoch).subtract(1, 'month').month()
+  const beginningOfLastMonth = moment().startOf('month').subtract(1, 'month')
+  const endOfLastMonth = moment(beginningOfLastMonth).add(1, 'month').subtract(1, 'second')
+  const monthOfProvidedDate = moment(dateAsEpoch)
+  return monthOfProvidedDate.isAfter(beginningOfLastMonth) && monthOfProvidedDate.isBefore(endOfLastMonth)
 }
 
 function getNumFromString(val) {
   return Number(val.replace(/[$,]/g, ''))
 }
 
-function reorganizeData(inputData) {
+function reorganizeData(inputData, delivered, dateRestricted) {
   const outputData = {}
+  const deliveredTags = ['DELIVERED', 'DELIVERING', 'COMPLETED']
 
   for(const item of inputData) {
-    console.log(dateIsLastMonth(item.order_date_epoch))
-    if(!(item.current_status === 'DELIVERED' || item.current_status === 'DELIVERING') || !dateIsLastMonth(item.order_date_epoch)) continue
+    const itemDelivered = deliveredTags.includes(item.current_status)
+    const notDateLastMonth = !dateIsLastMonth(Number(item.order_date_epoch) * 1000)
+    var cond1 = (delivered === 'only' && !itemDelivered)
+    var cond2 = (delivered === 'excluded' && itemDelivered)
+    var cond3 = (dateRestricted && notDateLastMonth)
+    if(
+      cond1 || cond2 || cond3
+    ) { continue }
     const values = {
       'total': getNumFromString(item.items_total_value),
       'quantity': Number(item.quantity),
+      'due_date': moment(Number(item.due_date_epoch) * 1000).format('MMMM Do YYYY, h:mm a'),
+      'order_date': moment(Number(item.order_date_epoch) * 1000).format('MMMM Do YYYY, h:mm a'),
+      'status': item.current_status,
     }
 
     if(outputData[item.cost_per_unit]) {
@@ -72,10 +83,12 @@ function generateProductByPriceDetails(type, productDataCustomers) {
       <span ${styleItem}2;" class="value-item">${convertToCurrency(item.total)}</span>
       <span ${styleLabel}3;" class="label-item">Quantity:</span>
       <span ${styleItem}3;" class="value-item">${item.quantity}</span>
-      <span ${styleLabel}4;" class="label-item">Date Delivered:</span>
-      <span ${styleItem}4;" class="value-item">${new Date(item.due_date_epoch).toString()}</span>
-      <span ${styleLabel}5;" class="label-item">Date Ordered:</span>
-      <span ${styleItem}5;" class="value-item">${new Date(item.order_date_epoch).toString()}</span>
+      <span ${styleLabel}4;" class="label-item">Date Ordered:</span>
+      <span ${styleItem}4;" class="value-item">${item.order_date}</span>
+      <span ${styleLabel}5;" class="label-item">Status:</span>
+      <span ${styleItem}5;" class="value-item">${item.status}</span>
+      <span ${styleLabel}6;" class="label-item toggle-view due-date hidden">Date Due:</span>
+      <span ${styleItem}6;" class="value-item toggle-view due-date hidden">${item.due_date}</span>
     `
     productIndex++
   }
@@ -83,11 +96,15 @@ function generateProductByPriceDetails(type, productDataCustomers) {
   return productDetails
 }
 
-function generatePrice(data) {
-  const podData = reorganizeData(data.podData)
+function generatePrice(data, delivered='only', dateRestricted=true) {
+  const podData = reorganizeData(data.podData, delivered, dateRestricted)
 
   for(const itemType of ['Products', 'Samples']) {
-    const itemDiv = createElement('div', ['price-list-item', 'flex-container', 'vertical'], '#by-price')
+    const itemDiv = createElement(
+      'div',
+      ['price-list-item', 'flex-container', 'vertical'],
+      `#by-price-${delivered === 'only' ? 'delivered' : (dateRestricted ? 'undelivered' : 'all')}`,
+    )
     itemDiv.innerHTML = `
     <div class="price-list-header">
       <span class="customer-title">${itemType}</span>
@@ -96,7 +113,9 @@ function generatePrice(data) {
     `
 
     const lists = itemDiv.querySelector('.lists')
-    for(const priceType in podData) {
+    const dataArray = Object.keys(podData)
+      .sort((a,b) => getNumFromString(b) - getNumFromString(a))
+    for(const priceType of dataArray) {
       if(itemType === 'Products' && getNumFromString(priceType) > MINIMUM_VALUE_FOR_SAMPLE
       || itemType === 'Samples' && getNumFromString(priceType) <= MINIMUM_VALUE_FOR_SAMPLE) {
         const details = generateProductByPriceDetails(priceType, podData[priceType])

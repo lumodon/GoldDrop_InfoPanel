@@ -6,16 +6,23 @@
     <div class="menu-option menu-hover" data-menu="normal">All Items</div>
     <div class="pax page">
       <div class="change-view-type">
-        <div class="view-type-option menu-hover selected" data-option="price">By Price</div>
+        <div class="view-type-option menu-hover" data-option="price-delivered">By Price Delivered</div>
+        <div class="view-type-option menu-hover selected" data-option="price-undelivered">By Price Undelivered</div>
+        <div class="view-type-option menu-hover" data-option="price-all">By Price All</div>
         <div class="view-type-option menu-hover" data-option="customer">By Customer</div>
         <div class="view-type-option menu-hover hidden" data-option="product">By Product</div>
+      </div>
+      <div class="toggles">
+        <div class="toggle-option menu-hover-alt" data-target="due-date">Show Due Dates</div>
       </div>
     </div>
   </div>
   <div class="main-body flex-container">
     <div class="table pax page">
       <div id="pax-pods" class="flex-container">
-        <div id="by-price" class="flex-container vertical"></div>
+        <div id="by-price-delivered" class="flex-container vertical hidden"></div>
+        <div id="by-price-undelivered" class="flex-container vertical"></div>
+        <div id="by-price-all" class="flex-container vertical hidden"></div>
         <div id="by-customer" class="flex-container vertical hidden"></div>
         <div id="by-product" class="flex-container vertical hidden"></div>
       </div>

@@ -35,4 +35,18 @@ export default () => {
       filterOption.classList.add('selected')
     })
   }
+
+  const toggleEles = document.querySelectorAll('.toggles .toggle-option')
+  for(const toggle of toggleEles) {
+    toggle.addEventListener('click', () => {
+      const isToggled = toggle.classList.contains('selected-alt')
+      toggle.classList[isToggled ? 'remove' : 'add']('selected-alt')
+
+      const target = toggle.dataset['target']
+      for(const targetElement of document.querySelectorAll(`.toggle-view.${target}`)) {
+        const isHidden = targetElement.classList.contains('hidden')
+        targetElement.classList[isHidden ? 'remove' : 'add']('hidden')
+      }
+    })
+  }
 }
