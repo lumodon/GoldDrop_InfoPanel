@@ -18,6 +18,7 @@ function getNumFromString(val) {
 function reorganizeData(inputData, delivered, dateRestricted) {
   const outputData = {}
   const deliveredTags = ['DELIVERED', 'DELIVERING', 'COMPLETED']
+  let totalQuantity = 0
 
   for(const item of inputData) {
     const itemDelivered = deliveredTags.includes(item.current_status)
@@ -43,12 +44,23 @@ function reorganizeData(inputData, delivered, dateRestricted) {
 
         outputData[item.cost_per_unit][item.customer].total = Math.round(sum * 100) / 100
         outputData[item.cost_per_unit][item.customer].quantity += Number(item.quantity)
+        outputData[item.cost_per_unit].totals.quantity += Number(item.quantity)
       } else {
         outputData[item.cost_per_unit][item.customer] = values
+        if(outputData[item.cost_per_unit].totals) {
+          outputData[item.cost_per_unit].totals.quantity += Number(item.quantity)
+        } else {
+          outputData[item.cost_per_unit].totals = {
+            'quantity': Number(item.quantity)
+          }
+        }
       }
     } else {
       outputData[item.cost_per_unit] = {
         [item.customer]: values,
+        'totals': {
+          'quantity': Number(values.quantity)
+        }
       }
     }
   }
@@ -60,6 +72,7 @@ function generateProductByPriceDetails(type, productDataCustomers) {
   productDetails.innerHTML = `
   <div class="product-list-header header">
     <span class="product-type-title">${type}</span>
+    <span class="quantity-totals">Quantity: ${productDataCustomers.totals.quantity}</span>
   </div>
   <div class="values-list flex-container"></div>
   `
@@ -68,8 +81,11 @@ function generateProductByPriceDetails(type, productDataCustomers) {
 
   let newItems = ``
   let productIndex = 0
-  const productKeys = Object.keys(productDataCustomers)
-  const productData = Object.values(productDataCustomers)
+  const productKeys = Object.keys(productDataCustomers).filter(it => it !== 'totals')
+  const productData = []
+  for(const key of productKeys) {
+    productData.push(productDataCustomers[key])
+  }
   while(productIndex < productData.length) {
     const item = productData[productIndex]
 
@@ -105,23 +121,29 @@ function generatePrice(data, delivered='only', dateRestricted=true) {
       ['price-list-item', 'flex-container', 'vertical'],
       `#by-price-${delivered === 'only' ? 'delivered' : (dateRestricted ? 'undelivered' : 'all')}`,
     )
+    console.log(podData, itemType)
     itemDiv.innerHTML = `
     <div class="price-list-header">
       <span class="customer-title">${itemType}</span>
+      <span class="quantity-grand-total"></span>
     </div>
     <div class="lists vertical flex-container"></div>
     `
 
+    console.log(itemType, data, podData, delivered, dateRestricted)
     const lists = itemDiv.querySelector('.lists')
     const dataArray = Object.keys(podData)
       .sort((a,b) => getNumFromString(b) - getNumFromString(a))
+    let grandTotalQuantity = 0
     for(const priceType of dataArray) {
+      grandTotalQuantity += podData[priceType].totals.quantity
       if(itemType === 'Products' && getNumFromString(priceType) > MINIMUM_VALUE_FOR_SAMPLE
       || itemType === 'Samples' && getNumFromString(priceType) <= MINIMUM_VALUE_FOR_SAMPLE) {
         const details = generateProductByPriceDetails(priceType, podData[priceType])
         lists.appendChild(details)
       }
     }
+    itemDiv.querySelector('.quantity-grand-total').innerText = `Grand Total Quantity: : ${grandTotalQuantity}`
   }
 }
 

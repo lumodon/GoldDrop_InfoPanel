@@ -193,6 +193,11 @@ html, body, .super-container {
   background-color: #CCF;
 }
 
+.quantity-totals {
+  position: relative;
+  top: 15px;
+}
+
 .brand-list-item {
   width: 365px;
   margin: 5px;
