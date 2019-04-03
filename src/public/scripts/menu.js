@@ -1,3 +1,5 @@
+import { repopulatePaxPods } from './api'
+
 export default () => {
   const menuButtons = document.querySelectorAll('.menu-option')
   for(const menuButton of menuButtons) {
@@ -43,9 +45,15 @@ export default () => {
       toggle.classList[isToggled ? 'remove' : 'add']('selected-alt')
 
       const target = toggle.dataset['target']
-      for(const targetElement of document.querySelectorAll(`.toggle-view.${target}`)) {
-        const isHidden = targetElement.classList.contains('hidden')
-        targetElement.classList[isHidden ? 'remove' : 'add']('hidden')
+      if(target) {
+        for(const targetElement of document.querySelectorAll(`.toggle-view.${target}`)) {
+          const isHidden = targetElement.classList.contains('hidden')
+          targetElement.classList[isHidden ? 'remove' : 'add']('hidden')
+        }
+      }
+
+      if(toggle.dataset['trigger'] === 'pax-pods') {
+        repopulatePaxPods()
       }
     })
   }

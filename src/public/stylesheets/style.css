@@ -224,6 +224,10 @@ html, body, .super-container {
   padding-right: 5px;
 }
 
+.totals label {
+  margin-top: 10px;
+}
+
 /* .subgrid {
   display: grid;
   grid-gap: 5px;
