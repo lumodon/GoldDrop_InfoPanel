@@ -1,6 +1,6 @@
 import { convertToCurrency } from '../../utils'
 
-function generateProductByCustomerDetails(type, productData, total) {
+function generateProductByCustomerDetails(type, productData, total, globalData) {
   const productDetails = document.createElement('div')
   productDetails.classList.add('product-details',  'flex-container')
   productDetails.innerHTML = `
@@ -10,6 +10,8 @@ function generateProductByCustomerDetails(type, productData, total) {
   <div class="totals flex-container vertical">
     <label>Total:</label>
     <span class="type-value">${convertToCurrency(total)}</span>
+    <label>Quantity:</label>
+    <span class="quantity-total"></span>
   </div>
   <div class="values-list flex-container"></div>
   `
@@ -28,6 +30,9 @@ function generateProductByCustomerDetails(type, productData, total) {
     const styleItem = `style="grid-column: ${String(2*productIndex + 2)}; grid-row: `
 
   // for(const item of productData) {
+    const quantityEle = productDetails.querySelector('.quantity-total')
+    quantityEle.innerText = Number(quantityEle.innerText) + Number(item.quantity)
+    globalData.quantity += Number(item.quantity)
     newItems += `
       <span ${styleLabel}1;" class="label-item">Item:</span>
       <span ${styleItem}1;" class="value-item">${item.unit_name}</span>
@@ -39,6 +44,8 @@ function generateProductByCustomerDetails(type, productData, total) {
       <span ${styleItem}4;" class="value-item">${item.cost_per_unit}</span>
       <span ${styleLabel}5;" class="label-item">Quantity:</span>
       <span ${styleItem}5;" class="value-item">${item.quantity}</span>
+      <span ${styleLabel}6;" class="label-item">Date:</span>
+      <span ${styleItem}6;" class="value-item">${moment(Number(item.order_date_epoch) * 1000).format('MMMM Do YYYY, h:mm a')}</span>
     `
     productIndex++
   }
@@ -47,6 +54,9 @@ function generateProductByCustomerDetails(type, productData, total) {
 }
 
 function generateCustomer(data) {
+  const globalData = {
+    'quantity': 0,
+  }
   const dataByCustomer = {}
   for(const paxpodData of data.podData) {
     dataByCustomer[paxpodData.customer] = {
@@ -67,6 +77,10 @@ function generateCustomer(data) {
     document.querySelector('#by-customer').appendChild(customerDiv)
     customerDiv.innerHTML = `
     <div class="customer-list-header">
+      <div>
+        <label>Grand Total Quantity:</label>
+        <span class="grand-total-customer-quantity"></span>
+      </div>
       <span class="customer-title">${customerName}</span>
     </div>
     <div class="lists vertical flex-container"></div>
@@ -80,10 +94,11 @@ function generateCustomer(data) {
         const appendingValue = Number(item.items_total_value.replace(/[$,]/g, ''))
         runningTotalForCustomer = Math.round((runningTotalForCustomer + appendingValue) * 100) / 100
       }
-      const details = generateProductByCustomerDetails(productType, customer[productType], String(runningTotalForCustomer))
+      const details = generateProductByCustomerDetails(productType, customer[productType], String(runningTotalForCustomer), globalData)
       lists.appendChild(details)
     }
   }
+  document.querySelector('.grand-total-customer-quantity').innerText = globalData.quantity
 }
 
 export default generateCustomer

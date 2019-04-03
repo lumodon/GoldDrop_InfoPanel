@@ -7,6 +7,7 @@ module.exports = (env) => {
       entry: path.resolve(__dirname, 'src/public/scripts/main.js'),
       output: {
         filename: 'bundle.js',
+        chunkFilename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
       },
       watch: true,
@@ -25,6 +26,7 @@ module.exports = (env) => {
       entry: path.resolve(__dirname, 'src/public/scripts/main.js'),
       output: {
         filename: 'bundle.js',
+        chunkFilename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
       },
       watch: false,

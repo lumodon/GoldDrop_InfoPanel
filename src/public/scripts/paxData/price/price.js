@@ -15,7 +15,8 @@ function getNumFromString(val) {
   return Number(val.replace(/[$,]/g, ''))
 }
 
-function reorganizeData(inputData, delivered, dateRestricted) {
+function reorganizeData(inputData, delivered) {
+  const dateRestricted = !document.querySelector('#date-restricted').classList.contains('selected-alt')
   const outputData = {}
   const deliveredTags = ['DELIVERED', 'DELIVERING', 'COMPLETED']
   let totalQuantity = 0
@@ -35,6 +36,7 @@ function reorganizeData(inputData, delivered, dateRestricted) {
       'due_date': moment(Number(item.due_date_epoch) * 1000).format('MMMM Do YYYY, h:mm a'),
       'order_date': moment(Number(item.order_date_epoch) * 1000).format('MMMM Do YYYY, h:mm a'),
       'status': item.current_status,
+      'sales_order': item.sales_order,
     }
 
     if(outputData[item.cost_per_unit]) {
@@ -104,7 +106,7 @@ function generateProductByPriceDetails(type, productDataCustomers) {
       <span ${styleLabel}5;" class="label-item">Status:</span>
       <span ${styleItem}5;" class="value-item">${item.status}</span>
       <span ${styleLabel}6;" class="label-item toggle-view due-date hidden">Date Due:</span>
-      <span ${styleItem}6;" class="value-item toggle-view due-date hidden">${item.due_date}</span>
+      <span ${styleItem}6;" class="value-item toggle-view due-date hidden">${item.sales_order}</span>
     `
     productIndex++
   }
