@@ -164,6 +164,10 @@ html, body, .super-container {
   font-size: 1em;
 }
 
+.toggles {
+  margin-top: 100px;
+}
+
 .totals {
   margin-right: 15px;
 }
@@ -204,9 +208,9 @@ html, body, .super-container {
 .grid {
   display: grid;
   grid-gap: 5px;
-  grid-template-rows: repeat(5, 40px);
+  grid-template-rows: repeat(6, 40px);
   height: 300px;
-  grid-auto-columns: 160px;
+  grid-auto-columns: 200px;
 }
 
 .value-item {
@@ -226,6 +230,37 @@ html, body, .super-container {
     0px -2px 1px rgba(0, 0, 0, 0.45);
   height: 160px;
 } */
+.menu-hover-alt {
+  border-radius: 15px;
+  border: solid 1px black;
+  padding: 6px;
+  margin: 8px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0px 7px 3px rgba(40,40,40,0.75);
+}
+
+.menu-hover-alt:active {
+  top: 2px;
+  box-shadow: inset 0px 4px 3px #555;
+  border-top: 2px solid black;
+}
+
+.menu-hover-alt:hover:not(.selected-alt) {
+  background-color: #ffa;
+}
+
+.selected-alt:hover {
+  background-color: #0150c0;
+}
+
+.selected-alt {
+  background-color: #18f;
+  color: white;
+  box-shadow:
+    inset 1px 2px 3px #333,
+    0 5px 3px #666;
+}
 
 .grid .value-item, .grid .label-item {
   border-bottom: solid 1px black;
