@@ -16,7 +16,12 @@ function getNumFromString(val) {
 }
 
 function reorganizeData(inputData, delivered) {
-  const dateRestricted = !document.querySelector('#date-restricted').classList.contains('selected-alt')
+  let dateRestricted
+  try {
+    dateRestricted = document.querySelector('#date-restricted').classList.contains('selected-alt')
+  } catch(e) {
+    dateRestricted = false
+  }
   const outputData = {}
   const deliveredTags = ['DELIVERED', 'DELIVERING', 'COMPLETED']
   let totalQuantity = 0
@@ -105,7 +110,7 @@ function generateProductByPriceDetails(type, productDataCustomers) {
       <span ${styleItem}4;" class="value-item">${item.order_date}</span>
       <span ${styleLabel}5;" class="label-item">Status:</span>
       <span ${styleItem}5;" class="value-item">${item.status}</span>
-      <span ${styleLabel}6;" class="label-item toggle-view due-date hidden">Date Due:</span>
+      <span ${styleLabel}6;" class="label-item toggle-view due-date hidden">Sales Order #:</span>
       <span ${styleItem}6;" class="value-item toggle-view due-date hidden">${item.sales_order}</span>
     `
     productIndex++
@@ -123,7 +128,6 @@ function generatePrice(data, delivered='only', dateRestricted=true) {
       ['price-list-item', 'flex-container', 'vertical'],
       `#by-price-${delivered === 'only' ? 'delivered' : (dateRestricted ? 'undelivered' : 'all')}`,
     )
-    console.log(podData, itemType)
     itemDiv.innerHTML = `
     <div class="price-list-header">
       <span class="customer-title">${itemType}</span>
@@ -132,7 +136,6 @@ function generatePrice(data, delivered='only', dateRestricted=true) {
     <div class="lists vertical flex-container"></div>
     `
 
-    console.log(itemType, data, podData, delivered, dateRestricted)
     const lists = itemDiv.querySelector('.lists')
     const dataArray = Object.keys(podData)
       .sort((a,b) => getNumFromString(b) - getNumFromString(a))
