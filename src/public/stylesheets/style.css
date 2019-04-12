@@ -322,6 +322,10 @@ h5 {
   margin: 10px;
 }
 
+.fullborder {
+  border: 1px solid black;
+}
+
 .sales-by-product .flex-container {
   justify-content: flex-start;
 }
