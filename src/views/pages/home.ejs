@@ -1,10 +1,11 @@
 <% include ../partials/header.ejs %>
 
 <div class="flex-container super-container">
-  <div class="menu flex-container vertical">
-    <div class="menu-option menu-hover selected" data-menu="pax">Pax Pods</div>
+  <div class="menu flex-container vertical center">
+    <div class="menu-option menu-hover" data-menu="pax">Pax Pods</div>
     <div class="menu-option menu-hover" data-menu="normal">All Items</div>
-    <div class="pax page">
+    <div class="menu-option menu-hover selected" data-menu="sales-by-product">Sales By Product</div>
+    <div class="hidden pax page">
       <div class="change-view-type">
         <div class="view-type-option menu-hover" data-option="price-delivered">By Price Delivered</div>
         <div class="view-type-option menu-hover selected" data-option="price-undelivered">By Price Undelivered</div>
@@ -19,7 +20,7 @@
     </div>
   </div>
   <div class="main-body flex-container">
-    <div class="table pax page">
+    <div class="hidden table pax page">
       <div id="pax-pods" class="flex-container">
         <div id="by-price-delivered" class="flex-container vertical hidden"></div>
         <div id="by-price-undelivered" class="flex-container vertical"></div>
@@ -31,6 +32,9 @@
     <div class="hidden table normal all-items-list page">
       <div class="by-customer flex-container vertical hidden"></div>
       <div id="brand-list" class="flex-container"></div>
+    </div>
+    <div class="table page sales-by-product">
+      <div class="flex-container list"></div>
     </div>
   </div>
 </div>

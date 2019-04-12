@@ -172,6 +172,11 @@ html, body, .super-container {
   margin-right: 15px;
 }
 
+.center {
+  text-align: center;
+  align-items: center;
+}
+
 .values-list .flex-container {
   width: 150px;
 }
@@ -306,4 +311,21 @@ h4 {
 h5 {
   margin-top: 10px;
   margin-bottom: 2px;
+}
+
+.big-row-item {
+  margin: 2px;
+  border-bottom: 1px solid black;
+}
+
+.sku-container {
+  margin: 10px;
+}
+
+.sales-by-product .flex-container {
+  justify-content: flex-start;
+}
+
+.space-bottom {
+  margin-bottom: 15px;
 }

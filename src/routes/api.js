@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {
   getBrands,
+  getSalesReport,
   getCategories,
   getSalesOrderNumbers,
   getItems,
@@ -20,12 +21,13 @@ router.post('/populatedata', (req, res) => {
 
   Promise.all([
     getBrands(),
+    getSalesReport(),
     getCategories(),
     getSalesOrderNumbers(),
     getItems(),
     getPods(),
-  ]).then(([ brands, categories, salesOrderNumbers, items, podData ]) => {
-    res.send(JSON.stringify({ brands, categories, salesOrderNumbers, items, podData }))
+  ]).then(([ brands, salesReport, categories, salesOrderNumbers, items, podData ]) => {
+    res.send(JSON.stringify({ brands, salesReport, categories, salesOrderNumbers, items, podData }))
   })
 })
 
