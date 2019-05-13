@@ -1,4 +1,4 @@
-import { convertToCurrency } from '../../utils'
+import { convertToCurrency, dateIsLastMonth } from '../../utils'
 
 function generateProductByCustomerDetails(type, productData, total, globalData) {
   const productDetails = document.createElement('div')
@@ -65,11 +65,21 @@ function generateCustomer(data) {
     }
   }
   for(const paxpodData of data.podData) {
+    console.log('paxpodData: ', paxpodData)
     const totalValueNum = Number(paxpodData.items_total_value.replace(/[$,]/g, ''))
 
     dataByCustomer[paxpodData.customer][totalValueNum >= 5 ? 'products' : 'samples'].push(paxpodData)
   }
+
+  // let dateRestricted
+  // try {
+  //   dateRestricted = document.querySelector('#date-restricted').classList.contains('selected-alt')
+  // } catch(e) {
+  //   dateRestricted = false
+  // }
+
   for(const customerName in dataByCustomer) {
+    // if(dateRestricted && !dateIsLastMonth())
     const customer = dataByCustomer[customerName]
 
     const customerDiv = document.createElement('div')

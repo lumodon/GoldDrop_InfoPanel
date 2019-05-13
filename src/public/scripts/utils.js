@@ -1,3 +1,7 @@
+import * as moment from 'moment'
+
+window['moment'] = moment // For debugging
+
 /*!
  * Merge two or more objects together.
  * (c) 2017 Chris Ferdinandi, MIT License, https://gomakethings.com
@@ -65,9 +69,18 @@ const calculateRealValue = (total, sample) => {
   return convertToCurrency(totalNum - sampleNum)
 }
 
+const dateIsLastMonth = (inputDateEpoch) => {
+  const dateAsEpoch = Number(inputDateEpoch) * 1000
+  const beginningOfLastMonth = moment().startOf('month').subtract(1, 'month')
+  const endOfLastMonth = moment(beginningOfLastMonth).add(1, 'month').subtract(1, 'second')
+  const monthOfProvidedDate = moment(dateAsEpoch)
+  return monthOfProvidedDate.isAfter(beginningOfLastMonth) && monthOfProvidedDate.isBefore(endOfLastMonth)
+}
+
 export {
   convertToCurrency,
   calculateRealValue,
   createElement,
   extend,
+  dateIsLastMonth,
 }

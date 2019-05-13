@@ -1,15 +1,5 @@
-import { createElement, convertToCurrency } from '../../utils'
+import { createElement, convertToCurrency, dateIsLastMonth } from '../../utils'
 import { MINIMUM_VALUE_FOR_SAMPLE } from '../constants'
-import * as moment from 'moment'
-
-window['moment'] = moment
-
-function dateIsLastMonth(dateAsEpoch) {
-  const beginningOfLastMonth = moment().startOf('month').subtract(1, 'month')
-  const endOfLastMonth = moment(beginningOfLastMonth).add(1, 'month').subtract(1, 'second')
-  const monthOfProvidedDate = moment(dateAsEpoch)
-  return monthOfProvidedDate.isAfter(beginningOfLastMonth) && monthOfProvidedDate.isBefore(endOfLastMonth)
-}
 
 function getNumFromString(val) {
   return Number(val.replace(/[$,]/g, ''))
@@ -28,7 +18,7 @@ function reorganizeData(inputData, delivered) {
 
   for(const item of inputData) {
     const itemDelivered = deliveredTags.includes(item.current_status)
-    const notDateLastMonth = !dateIsLastMonth(Number(item.order_date_epoch) * 1000)
+    const notDateLastMonth = !dateIsLastMonth(item.order_date_epoch)
     var cond1 = (delivered === 'only' && !itemDelivered)
     var cond2 = (delivered === 'excluded' && itemDelivered)
     var cond3 = (dateRestricted && notDateLastMonth)
