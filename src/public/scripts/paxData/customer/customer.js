@@ -64,22 +64,29 @@ function generateCustomer(data) {
       'samples': [],
     }
   }
+
+  const dateRestrictedCheck = (paxpodData) => {
+    let dateRestricted
+    try {
+      dateRestricted = document.querySelector('#date-restricted').classList.contains('selected-alt')
+    } catch(e) {
+      dateRestricted = false
+    }
+    return dateRestricted && !dateIsLastMonth(paxpodData.order_date_epoch)
+  }
+
   for(const paxpodData of data.podData) {
+    if(dateRestrictedCheck(paxpodData)) {
+      continue
+    }
+
     console.log('paxpodData: ', paxpodData)
     const totalValueNum = Number(paxpodData.items_total_value.replace(/[$,]/g, ''))
 
     dataByCustomer[paxpodData.customer][totalValueNum >= 5 ? 'products' : 'samples'].push(paxpodData)
   }
 
-  // let dateRestricted
-  // try {
-  //   dateRestricted = document.querySelector('#date-restricted').classList.contains('selected-alt')
-  // } catch(e) {
-  //   dateRestricted = false
-  // }
-
   for(const customerName in dataByCustomer) {
-    // if(dateRestricted && !dateIsLastMonth())
     const customer = dataByCustomer[customerName]
 
     const customerDiv = document.createElement('div')
