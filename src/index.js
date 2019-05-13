@@ -19,6 +19,10 @@ app.use(express.static(path.join(__dirname, 'public/stylesheets')))
 app.use(express.static(path.join(__dirname, 'public/images')))
 app.use(express.static(path.join(__dirname, '../dist/')))
 
+app.use('/', (req, res, next) => {
+  console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress, new Date().toString())
+  next()
+})
 app.use('/', require('./routes'))
 app.use((req, res) => {
   void req
